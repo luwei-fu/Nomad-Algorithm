@@ -1,0 +1,39 @@
+ clear all
+ clc
+%mex cec13_func.cpp -DWINDOWS
+D=30;
+Xmin=-100;
+Xmax=100;
+pop_size=30;
+iter_max=1000;
+runs=3;
+fhd=str2func('cec13_0');
+begin=cputime;
+for i=1:5
+    func_num=i
+    for j=1:runs
+        
+        [position,gbest,time]=NA(fhd,D,pop_size,iter_max,Xmin,Xmax,func_num);
+      %[position,gbest,time]= PSO_func(fhd,D,pop_size,iter_max,Xmin,Xmax,func_num);
+      %  [position,gbest,time]=WOA(fhd,D,pop_size,iter_max,Xmin,Xmax,func_num);
+       % [position,gbest,time]=GSA(fhd,D,pop_size,iter_max,Xmin,Xmax,func_num);
+       %   [position,gbest,time]=ABC(fhd,D,pop_size,iter_max,Xmin,Xmax,func_num);
+      %  [position,gbest,time]=FPA(fhd,D,pop_size,iter_max,Xmin,Xmax,func_num);
+% [position,gbest,time]=CSA(fhd,D,pop_size,iter_max,Xmin,Xmax,func_num);
+        xbest(j,:)=position;
+        fbest(i,j)=gbest;
+        timecost(i,j)=time;
+
+    end
+
+    f_value(i,1)=mean(fbest(i,:));    %   mean optima of multiple runs
+    f_value(i,2)=std(fbest(i,:)) ;   %   std of multiple runs
+    f_value(i,3)=mean(timecost(i,:));  %   mean value of time consumption
+end
+    timetotal=(cputime-begin)/60
+    time=timetotal/runs
+fprintf('\t mean \t\t STD \t time'); 
+for i=1:func_num
+    fprintf('\nF%d:\t%.2e',i,f_value(i,:));
+    fprintf('\nF%d:\t%.2e',i,f_value(i,:));
+end
